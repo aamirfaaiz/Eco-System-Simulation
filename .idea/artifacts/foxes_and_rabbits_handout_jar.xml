@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="foxes-and-rabbits-handout:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/foxes_and_rabbits_handout_jar</output-path>
-    <root id="archive" name="foxes-and-rabbits-handout.jar">
-      <element id="module-output" name="foxes-and-rabbits-handout" />
-    </root>
-  </artifact>
-</component>
