@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Random;
@@ -144,6 +145,7 @@ public class Snake extends Animal {
             Location loc = free.remove(0);
             Snake young = new Snake(false, field, loc);
             newSnakes.add(young);
+
         }
     }
 
@@ -229,6 +231,10 @@ public class Snake extends Animal {
         return state;
     }
 
+
+
+
+    
 
 
 

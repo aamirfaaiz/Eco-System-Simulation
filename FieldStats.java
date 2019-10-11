@@ -5,9 +5,7 @@ import java.util.HashMap;
  * This class collects and provides some statistical data on the state 
  * of a field. It is flexible: it will create and maintain a counter 
  * for any class of object that is found within the field.
- * 
- * @author David J. Barnes and Michael Kölling
- * @version 2016.02.29
+ * @author Aamir Faaiz
  */
 public class FieldStats
 {
@@ -25,7 +23,11 @@ public class FieldStats
         // we might find
         counters = new HashMap<>();
         countsValid = true;
+
     }
+
+
+
 
     /**
      * Get details of what is in the field.
@@ -46,7 +48,22 @@ public class FieldStats
         }
         return buffer.toString();
     }
-    
+
+    /**
+     * Get the number of individuals in the population of a given class.
+     * @return  An int with the number for this class.
+     */
+    public int getPopulationCount(Field field, Class key)
+    {
+        if(!countsValid) {
+            generateCounts(field);
+        }
+
+        Counter counter = counters.get(key);
+        return counter.getCount();
+    }
+
+
     /**
      * Invalidate the current set of statistics; reset all 
      * counts to zero.

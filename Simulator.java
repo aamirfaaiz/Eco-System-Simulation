@@ -8,8 +8,7 @@ import java.awt.Color;
  * A simple predator-prey simulator, based on a rectangular field
  * containing Mouses and foxes.
  * 
- * @author David J. Barnes and Michael Kölling
- * @edited by Aamir Faaiz
+ * @author Aamir Faaiz
  * @version 2019-FEB
  */
 public class Simulator
@@ -42,7 +41,8 @@ public class Simulator
     // The current step of the simulation.
     private int step;
     // A graphical view of the simulation.
-    private SimulatorView view;
+    // A graphical view of the simulation.
+    private List<SimulatorView> views;
 
     //The current time status ; can be either day/night
     private String timeStatus;
@@ -78,19 +78,28 @@ public class Simulator
             depth = DEFAULT_DEPTH;
             width = DEFAULT_WIDTH;
         }
-        
+
         animals = new ArrayList<>();
         field = new Field(depth, width);
 
-        // Create a view of the state of each location in the field.
-        view = new SimulatorView(depth, width);
+        views = new ArrayList<>();
+        SimulatorView view = new GridView(depth, width);
         view.setColor(Mouse.class, Color.ORANGE);
         view.setColor(Cat.class, Color.BLUE);
         view.setColor(Owl.class, Color.RED);
         view.setColor(Plant.class, Color.GREEN);
         view.setColor(Squirrel.class, Color.GRAY);
         view.setColor(Snake.class, Color.YELLOW);
-        
+        views.add(view);
+
+        view = new GraphView(500,100,500);
+        view.setColor(Mouse.class, Color.ORANGE);
+        view.setColor(Cat.class, Color.BLUE);
+        view.setColor(Owl.class, Color.RED);
+        view.setColor(Plant.class, Color.GREEN);
+        view.setColor(Squirrel.class, Color.GRAY);
+        view.setColor(Snake.class, Color.YELLOW);
+        views.add(view);
         // Setup a valid starting point.
         reset();
     }
@@ -98,8 +107,6 @@ public class Simulator
     public static void main(String[] args){
         Simulator simulator =  new Simulator();
         simulator.runLongSimulation();
-
-
     }
     
     /**
@@ -118,9 +125,9 @@ public class Simulator
      */
     public void simulate(int numSteps)
     {
-        for(int step = 1; step <= numSteps && view.isViable(field); step++) {
+        for(int step = 1; step <= numSteps && views.get(0).isViable(field); step++) {
             simulateOneStep();
-            delay(100);   // uncomment this to run more slowly
+            delay(250);//uncomment to make the simulation run faster!
         }
     }
     
@@ -129,13 +136,11 @@ public class Simulator
      * Iterate over the whole field updating the state of each
      * fox and Mouse.
      */
-    public void simulateOneStep()
+    private void simulateOneStep()
     {
         step++;
         counter++;
         setWeather(counter);
-        
-
         // Provide space for newborn animals.
         List<Animal> newAnimals = new ArrayList<>();
         // Let all Mouses act.
@@ -172,21 +177,21 @@ public class Simulator
         animals.addAll(newAnimals);
         
 
-        view.showStatus(step, field, weather, timeStatus);
+        updateViews();
 
     }
 
     /**
      * Reset the simulation to a starting position.
      */
-    public void reset()
+    private void reset()
     {
         step = 0;
         animals.clear();
         populate();
         
         // Show the starting state in the view.
-        view.showStatus(step, field, weather,timeStatus);
+        updateViews();
     }
     
     /**
@@ -270,6 +275,16 @@ public class Simulator
             else{
                 //do nothing
             }
+    }
+
+    /**
+     * Update all existing views.
+     */
+    private void updateViews()
+    {
+        for (SimulatorView view : views) {
+            view.showStatus(step, field);
+        }
     }
 
 }
